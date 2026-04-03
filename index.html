@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surrey Trails — Wander Wild Surrey</title>
+  <meta name="description" content="Discover hidden walks, cycling routes and nature spots across the Surrey Hills.">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    #hero {
+      position: relative;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-bottom: 3px double var(--border-dark);
+      background: var(--parchment-mid);
+    }
+    .hero-content { position: relative; z-index: 2; text-align: center; padding: 3rem 2rem; max-width: 700px; }
+    .hero-ornament { font-size: 2rem; color: var(--border-dark); margin-bottom: .5rem; line-height: 1; }
+    .hero-title { font-family: 'IM Fell English SC', serif; font-size: clamp(2.2rem,5vw,3.8rem); color: var(--ink); line-height: 1.1; margin-bottom: .5rem; letter-spacing: 2px; }
+    .hero-title em { font-family: 'IM Fell English', serif; font-style: italic; color: var(--sepia-red); }
+    .hero-tagline { font-family: 'IM Fell English', serif; font-size: 1.3rem; font-style: italic; color: var(--ink-light); margin: 1rem 0 1.5rem; line-height: 1.6; }
+    .hero-divider { display: flex; align-items: center; gap: 1rem; color: var(--border-dark); margin: 1rem 0; }
+    .hero-divider::before, .hero-divider::after { content: ''; flex: 1; border-top: 1.5px solid var(--border); }
+    .scroll-deco { position: absolute; top: 50%; transform: translateY(-50%); font-size: 5rem; opacity: .06; color: var(--ink); user-select: none; pointer-events: none; font-family: 'IM Fell English', serif; }
+    .scroll-deco.left { left: 1rem; }
+    .scroll-deco.right { right: 1rem; }
+    .icons-strip { padding: 2.5rem 2rem; text-align: center; max-width: 900px; margin: 0 auto; }
+    .icons-strip h2 { font-family: 'IM Fell English SC', serif; font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 1.5rem; color: var(--ink); }
+    .icons-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.5rem 2rem; }
+    .icon-item { text-align: center; min-width: 70px; }
+    .icon-item .icon { font-size: 2rem; display: block; margin-bottom: .3rem; }
+    .icon-item .label { font-size: .85rem; color: var(--ink-faint); letter-spacing: 1px; font-family: 'Crimson Pro', serif; }
+    #featured { background: var(--ink); color: var(--parchment); padding: 3rem 2rem; border-top: 3px double var(--gold); border-bottom: 3px double var(--gold); }
+    .featured-inner { max-width: 900px; margin: 0 auto; }
+    .featured-eyebrow { font-family: 'Crimson Pro', serif; font-size: .9rem; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: .5rem; text-align: center; }
+    .featured-title { font-family: 'IM Fell English SC', serif; font-size: 2rem; color: var(--parchment); letter-spacing: 2px; text-align: center; margin-bottom: 2rem; }
+    .featured-body { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+    @media (max-width:600px) { .featured-body { grid-template-columns: 1fr; } }
+    .featured-map { background: #1a0f04; border: 2px solid var(--gold); height: 260px; overflow: hidden; }
+    .map-svg { width: 100%; height: 100%; }
+    .featured-desc { font-family: 'IM Fell English', serif; font-style: italic; font-size: 1.15rem; line-height: 1.7; margin-bottom: 1rem; color: var(--parchment); }
+    .featured-stats { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1rem; }
+    .stat-box { border: 1px solid var(--border-dark); padding: .6rem .75rem; text-align: center; }
+    .stat-val { font-family: 'IM Fell English SC', serif; font-size: 1.4rem; color: var(--gold); display: block; }
+    .stat-lbl { font-size: .85rem; color: var(--ink-faint); letter-spacing: 1px; }
+    .waypoint { display: flex; align-items: flex-start; gap: .75rem; padding: .4rem 0; border-bottom: 1px solid rgba(184,149,106,0.2); font-size: .95rem; color: var(--parchment-dark); }
+    .waypoint:last-child { border-bottom: none; }
+    .wp-num { width: 22px; height: 22px; border: 1px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .75rem; color: var(--gold); flex-shrink: 0; margin-top: 1px; }
+    .btn-gold { display: inline-block; margin-top: 1rem; border: 1.5px solid var(--gold); color: var(--gold); padding: .5rem 1.5rem; font-family: 'IM Fell English SC', serif; letter-spacing: 2px; cursor: pointer; transition: all .2s; font-size: 1rem; background: transparent; text-decoration: none; }
+    .btn-gold:hover { background: var(--gold); color: var(--ink); }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">✦ <span>Surrey</span> Trails ✦</a>
+  <div class="nav-links">
+    <a href="index.html" class="active">Home</a>
+    <a href="trails.html">Trails &amp; Rides</a>
+    <a href="map-builder.html">Map Builder</a>
+  </div>
+</nav>
+
+<div id="hero">
+  <div class="scroll-deco left">❧</div>
+  <div class="scroll-deco right">❧</div>
+  <div class="hero-content">
+    <div class="hero-ornament">✦ ✦ ✦</div>
+    <h1 class="hero-title">Wander <em>Wild</em><br>Surrey</h1>
+    <div class="hero-divider"><span>✦</span></div>
+    <p class="hero-tagline">"Where ancient woodland whispers, chalk hills roll endlessly,<br>and every lane leads to a tale untold."</p>
+    <p style="font-size:1rem;color:var(--ink-faint);margin-bottom:1.5rem;">Discover hidden walks, byways &amp; nature's secret places across the Garden of England</p>
+    <a class="btn-primary" href="trails.html" style="margin:.5rem .5rem 0;">Explore the Trails</a>
+    <a class="btn-secondary" href="map-builder.html" style="margin:.5rem .5rem 0;">Build a Map</a>
+  </div>
+</div>
+
+<div class="icons-strip">
+  <h2>What You'll Find</h2>
+  <div class="icons-grid">
+    <div class="icon-item"><span class="icon">🌲</span><span class="label">Forests</span></div>
+    <div class="icon-item"><span class="icon">💧</span><span class="label">Ponds</span></div>
+    <div class="icon-item"><span class="icon">⛰️</span><span class="label">Hills</span></div>
+    <div class="icon-item"><span class="icon">🏘️</span><span class="label">Villages</span></div>
+    <div class="icon-item"><span class="icon">⛪</span><span class="label">Churches</span></div>
+    <div class="icon-item"><span class="icon">🛤️</span><span class="label">Ancient Paths</span></div>
+    <div class="icon-item"><span class="icon">🔭</span><span class="label">Viewpoints</span></div>
+    <div class="icon-item"><span class="icon">🚴</span><span class="label">Bike Routes</span></div>
+  </div>
+</div>
+
+<div id="featured">
+  <div class="featured-inner">
+    <div class="featured-eyebrow">✦ Route of the Season ✦</div>
+    <h2 class="featured-title">The Box Hill Pilgrim's Loop</h2>
+    <div class="featured-body">
+      <div class="featured-map">
+        <svg class="map-svg" viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg">
+          <rect width="340" height="240" fill="#1a0f04"/>
+          <ellipse cx="120" cy="100" rx="90" ry="55" fill="#2a1a06" opacity=".9"/>
+          <ellipse cx="220" cy="130" rx="70" ry="40" fill="#1e1304" opacity=".8"/>
+          <path d="M 40 200 Q 90 170 130 140 Q 170 110 200 90 Q 240 65 290 60" stroke="#c9920a" stroke-width="2.5" fill="none" stroke-dasharray="6,3"/>
+          <path d="M 130 140 Q 115 155 100 170 Q 80 185 70 200" stroke="#8b6340" stroke-width="1.5" fill="none" stroke-dasharray="4,4"/>
+          <path d="M 10 160 Q 60 155 100 165 Q 140 175 170 160" stroke="#2a4a6b" stroke-width="2" fill="none"/>
+          <circle cx="40" cy="200" r="6" fill="#c9920a" stroke="#1a0f04" stroke-width="1.5"/>
+          <text x="44" y="196" font-size="9" fill="#f4e8c1" font-family="Georgia">Start</text>
+          <circle cx="130" cy="140" r="5" fill="#c9920a" stroke="#1a0f04" stroke-width="1.5"/>
+          <text x="136" y="138" font-size="9" fill="#f4e8c1" font-family="Georgia">Viewpoint</text>
+          <circle cx="290" cy="60" r="6" fill="#c9920a" stroke="#1a0f04" stroke-width="1.5"/>
+          <text x="270" y="55" font-size="9" fill="#f4e8c1" font-family="Georgia">Summit</text>
+          <text x="80" y="125" font-size="14" fill="#3d5a2a">🌲</text>
+          <text x="160" y="115" font-size="12" fill="#3d5a2a">🌳</text>
+          <g transform="translate(300,200)">
+            <circle r="18" fill="#1a0f04" stroke="#c9920a" stroke-width="1.5"/>
+            <text x="0" y="-8" font-size="9" fill="#c9920a" text-anchor="middle" font-family="Georgia">N</text>
+            <text x="0" y="14" font-size="8" fill="#8b6340" text-anchor="middle" font-family="Georgia">S</text>
+            <text x="10" y="3" font-size="8" fill="#8b6340" text-anchor="middle" font-family="Georgia">E</text>
+            <text x="-10" y="3" font-size="8" fill="#8b6340" text-anchor="middle" font-family="Georgia">W</text>
+            <polygon points="0,-12 2,0 0,4 -2,0" fill="#c9920a"/>
+            <polygon points="0,12 2,0 0,-4 -2,0" fill="#5a3a1a"/>
+          </g>
+          <line x1="20" y1="220" x2="80" y2="220" stroke="#c9920a" stroke-width="1.5"/>
+          <line x1="20" y1="215" x2="20" y2="225" stroke="#c9920a" stroke-width="1.5"/>
+          <line x1="80" y1="215" x2="80" y2="225" stroke="#c9920a" stroke-width="1.5"/>
+          <text x="50" y="235" font-size="8" fill="#c9920a" text-anchor="middle" font-family="Georgia">1 km</text>
+        </svg>
+      </div>
+      <div>
+        <p class="featured-desc">"Follow the old pilgrim's path from Burford Bridge, ascending through the ancient yew forest to Box Hill's chalk summit — where the North Downs unfurl like a great painted map."</p>
+        <div class="featured-stats">
+          <div class="stat-box"><span class="stat-val">8.4 mi</span><span class="stat-lbl">Distance</span></div>
+          <div class="stat-box"><span class="stat-val">3.5 hrs</span><span class="stat-lbl">Duration</span></div>
+          <div class="stat-box"><span class="stat-val">320 m</span><span class="stat-lbl">Ascent</span></div>
+          <div class="stat-box"><span class="stat-val">Moderate</span><span class="stat-lbl">Difficulty</span></div>
+        </div>
+        <div>
+          <div class="waypoint"><div class="wp-num">1</div><span>Burford Bridge Hotel — start beside the River Mole</span></div>
+          <div class="waypoint"><div class="wp-num">2</div><span>Ancient yew grove — 2,000-year-old trees</span></div>
+          <div class="waypoint"><div class="wp-num">3</div><span>Box Hill summit viewpoint — sweeping North Downs panorama</span></div>
+          <div class="waypoint"><div class="wp-num">4</div><span>Stepping Stones across the River Mole</span></div>
+        </div>
+        <a class="btn-gold" href="map-builder.html">Build this route ↗</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="newsletter-section">
+  <div class="newsletter-inner">
+    <div class="newsletter-icon">📜</div>
+    <h2 class="newsletter-title">Receive the Dispatch</h2>
+    <p class="newsletter-sub">Seasonal trails, hidden gems &amp; new routes — delivered to your inbox</p>
+    <div class="newsletter-form">
+      <input class="newsletter-input" type="email" placeholder="your.email@domain.com" id="emailInput"/>
+      <button class="newsletter-btn" onclick="subscribeNewsletter()">Subscribe</button>
+    </div>
+    <div class="newsletter-confirm" id="nlConfirm">✦ Welcome, fellow wanderer! The Dispatch shall find thee. ✦</div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 <span>Surrey Trails</span> &mdash; Wander freely. Tread gently. Leave no trace.
+</footer>
+
+<script src="js/data.js"></script>
+</body>
+</html>

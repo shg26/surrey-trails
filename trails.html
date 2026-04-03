@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surrey Trails — Trails &amp; Rides</title>
+  <meta name="description" content="Browse all Surrey walks, cycling routes and nature spots. Filter by type and difficulty.">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .page-wrap { padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .filters { background: var(--parchment-mid); border: 1.5px solid var(--border); padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; position: relative; }
+    .filters::before { content: '✦ Filter the Realm ✦'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--parchment-mid); padding: 0 .75rem; font-family: 'Crimson Pro', serif; font-size: .8rem; color: var(--ink-faint); white-space: nowrap; letter-spacing: 1px; }
+    .filter-group { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .filter-label { font-size: .85rem; color: var(--ink-faint); font-family: 'Crimson Pro', serif; letter-spacing: 1px; display: flex; align-items: center; }
+    .filter-btn { font-family: 'Crimson Pro', serif; background: transparent; border: 1.5px solid var(--border); color: var(--ink-light); padding: .3rem .85rem; cursor: pointer; font-size: .95rem; letter-spacing: .5px; transition: all .2s; }
+    .filter-btn:hover, .filter-btn.active { background: var(--ink); color: var(--parchment); border-color: var(--ink); }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 3rem; font-family: 'IM Fell English', serif; font-style: italic; color: var(--ink-faint); font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">✦ <span>Surrey</span> Trails ✦</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="trails.html" class="active">Trails &amp; Rides</a>
+    <a href="map-builder.html">Map Builder</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="section-header">
+    <h1 class="section-title">Trails &amp; Byways</h1>
+    <div class="ornamental-rule"><span>✦</span></div>
+    <p class="section-subtitle">All manner of wandering, riding &amp; nature-seeking across the Surrey hills</p>
+  </div>
+
+  <div class="filters">
+    <span class="filter-label">Type:</span>
+    <div class="filter-group" id="typeFilters">
+      <button class="filter-btn active" data-type="all">All</button>
+      <button class="filter-btn" data-type="walk">🥾 Walk</button>
+      <button class="filter-btn" data-type="bike">🚴 Bike</button>
+      <button class="filter-btn" data-type="nature">🌿 Nature</button>
+    </div>
+    <span class="filter-label" style="margin-left:1rem;">Difficulty:</span>
+    <div class="filter-group" id="diffFilters">
+      <button class="filter-btn active" data-diff="all">All</button>
+      <button class="filter-btn" data-diff="easy">Easy</button>
+      <button class="filter-btn" data-diff="moderate">Moderate</button>
+      <button class="filter-btn" data-diff="hard">Hard</button>
+    </div>
+  </div>
+
+  <div class="cards-grid" id="cardsGrid"></div>
+</div>
+
+<div id="newsletter-section">
+  <div class="newsletter-inner">
+    <div class="newsletter-icon">📜</div>
+    <h2 class="newsletter-title">Receive the Dispatch</h2>
+    <p class="newsletter-sub">Seasonal trails, hidden gems &amp; new routes — delivered to your inbox</p>
+    <div class="newsletter-form">
+      <input class="newsletter-input" type="email" placeholder="your.email@domain.com" id="emailInput"/>
+      <button class="newsletter-btn" onclick="subscribeNewsletter()">Subscribe</button>
+    </div>
+    <div class="newsletter-confirm" id="nlConfirm">✦ Welcome, fellow wanderer! The Dispatch shall find thee. ✦</div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 <span>Surrey Trails</span> &mdash; Wander freely. Tread gently. Leave no trace.
+</footer>
+
+<script src="js/data.js"></script>
+<script>
+let activeType = 'all', activeDiff = 'all';
+
+function renderCards() {
+  const grid = document.getElementById('cardsGrid');
+  const filtered = trails.filter(t =>
+    (activeType === 'all' || t.type === activeType) &&
+    (activeDiff === 'all' || t.diff === activeDiff)
+  );
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty-state">No trails match thy criteria, wanderer...<br><small style="font-size:.9rem;margin-top:.5rem;display:block;">Try broadening your filters above.</small></div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(t => `
+    <div class="trail-card">
+      <div class="card-corner tl"></div><div class="card-corner tr"></div>
+      <div class="card-corner bl"></div><div class="card-corner br"></div>
+      <div class="card-type-badge badge-${t.badge}">${t.badge.toUpperCase()}</div>
+      <div class="card-icon-area">${t.icon}</div>
+      <div class="card-body">
+        <div class="card-title">${t.title}</div>
+        <p class="card-description">${t.desc}</p>
+        <div class="card-meta">
+          <span>📍 ${t.dist}</span>
+          <span>⏱ ${t.dur}</span>
+          <span class="diff-badge diff-${t.diff}">${t.diff}</span>
+        </div>
+        <div class="card-features">
+          ${t.features.map(f => `<span class="feat-tag">${featureIcons[f]||'✦'} ${f}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('typeFilters').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn'); if (!btn) return;
+  document.querySelectorAll('#typeFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeType = btn.dataset.type;
+  renderCards();
+});
+
+document.getElementById('diffFilters').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn'); if (!btn) return;
+  document.querySelectorAll('#diffFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeDiff = btn.dataset.diff;
+  renderCards();
+});
+
+renderCards();
+</script>
+</body>
+</html>

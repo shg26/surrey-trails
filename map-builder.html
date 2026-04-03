@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surrey Trails — Map Builder</title>
+  <meta name="description" content="Design and publish your own Surrey walking and cycling maps with our drag-and-drop cartography tool.">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .page-wrap { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">✦ <span>Surrey</span> Trails ✦</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="trails.html">Trails &amp; Rides</a>
+    <a href="map-builder.html" class="active">Map Builder</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="section-header">
+    <h1 class="section-title">The Cartographer's Studio</h1>
+    <div class="ornamental-rule"><span>✦</span></div>
+    <p class="section-subtitle">Design &amp; publish your own routes with compass, scale &amp; waypoints</p>
+  </div>
+
+  <div class="builder-layout">
+    <!-- TOOLS SIDEBAR -->
+    <div>
+      <div class="builder-tools">
+        <div class="tools-title">✦ Tools ✦</div>
+
+        <div class="tool-group">
+          <div class="tool-group-label">Draw</div>
+          <button class="tool-btn selected" id="tool-path" onclick="selectTool('path')"><span>〰️</span> Path / Route</button>
+          <button class="tool-btn" id="tool-select" onclick="selectTool('select')"><span>↖️</span> Select / Move</button>
+        </div>
+
+        <div class="tool-sep"></div>
+
+        <div class="tool-group">
+          <div class="tool-group-label">Place Markers</div>
+          <button class="tool-btn" id="tool-start" onclick="selectTool('start')"><span>🟢</span> Start Point</button>
+          <button class="tool-btn" id="tool-waypoint" onclick="selectTool('waypoint')"><span>🟡</span> Waypoint</button>
+          <button class="tool-btn" id="tool-end" onclick="selectTool('end')"><span>🔴</span> End Point</button>
+        </div>
+
+        <div class="tool-sep"></div>
+
+        <div class="tool-group">
+          <div class="tool-group-label">Landmarks</div>
+          <button class="tool-btn" id="tool-forest" onclick="selectTool('forest')"><span>🌲</span> Forest</button>
+          <button class="tool-btn" id="tool-pond" onclick="selectTool('pond')"><span>💧</span> Pond / Lake</button>
+          <button class="tool-btn" id="tool-hill" onclick="selectTool('hill')"><span>⛰️</span> Hill</button>
+          <button class="tool-btn" id="tool-village" onclick="selectTool('village')"><span>🏘️</span> Village</button>
+          <button class="tool-btn" id="tool-church" onclick="selectTool('church')"><span>⛪</span> Church</button>
+          <button class="tool-btn" id="tool-pub" onclick="selectTool('pub')"><span>🍺</span> Pub</button>
+        </div>
+
+        <div class="tool-sep"></div>
+
+        <div class="tool-group">
+          <div class="tool-group-label">Overlays</div>
+          <button class="tool-btn" id="tool-compass" onclick="selectTool('compass')"><span>🧭</span> Compass Rose</button>
+          <button class="tool-btn" id="tool-scale" onclick="selectTool('scale')"><span>📏</span> Distance Scale</button>
+          <button class="tool-btn" id="tool-label" onclick="selectTool('label')"><span>🏷️</span> Text Label</button>
+        </div>
+
+        <div class="tool-sep"></div>
+
+        <div class="tool-group">
+          <div class="tool-group-label">Path Colour</div>
+          <div class="color-swatches">
+            <div class="swatch active" style="background:#c9920a" onclick="selectColor(this,'#c9920a')"></div>
+            <div class="swatch" style="background:#8b3a2a" onclick="selectColor(this,'#8b3a2a')"></div>
+            <div class="swatch" style="background:#3d5a2a" onclick="selectColor(this,'#3d5a2a')"></div>
+            <div class="swatch" style="background:#2a4a6b" onclick="selectColor(this,'#2a4a6b')"></div>
+            <div class="swatch" style="background:#2c1a08" onclick="selectColor(this,'#2c1a08')"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROPS PANEL -->
+      <div class="props-panel">
+        <div class="props-title">Route Properties</div>
+        <div class="prop-row">
+          <label>Route name</label>
+          <input type="text" id="routeName" value="My Surrey Walk" oninput="updateRouteLabel()"/>
+        </div>
+        <div class="prop-row">
+          <label>Scale (km)</label>
+          <input type="range" id="scaleKm" min="0.5" max="20" value="5" step="0.5" oninput="updateScale(this.value)"/>
+          <span class="prop-val" id="scaleVal">5 km</span>
+        </div>
+        <div class="prop-row">
+          <label>Total dist.</label>
+          <span id="totalDist" style="font-family:'IM Fell English SC',serif;color:var(--gold);font-size:1.1rem;">—</span>
+        </div>
+        <div class="prop-row" style="margin-top:.5rem;gap:.5rem;flex-wrap:wrap;">
+          <button class="canvas-tool-btn" onclick="clearCanvas()" style="border-color:var(--sepia-red);color:var(--sepia-red);">🗑 Clear</button>
+          <button class="canvas-tool-btn" onclick="undoLast()">↩ Undo</button>
+          <button class="canvas-tool-btn" onclick="exportMap()">💾 Save PNG</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CANVAS AREA -->
+    <div>
+      <div class="builder-canvas-wrap">
+        <div class="canvas-toolbar">
+          <span style="font-family:'IM Fell English SC',serif;font-size:.9rem;color:var(--parchment);letter-spacing:1px;">Canvas</span>
+          <button class="canvas-tool-btn" id="gridBtn" onclick="toggleGrid()">⊞ Grid</button>
+          <button class="canvas-tool-btn" onclick="addCompassToCanvas()">🧭 Compass</button>
+          <button class="canvas-tool-btn" onclick="addScaleBar()">📏 Scale Bar</button>
+          <span class="canvas-info" id="canvasInfo">Click to draw · Double-click to finish path</span>
+        </div>
+        <canvas id="mapCanvas" width="800" height="520"></canvas>
+      </div>
+
+      <p style="font-size:.85rem;color:var(--ink-faint);font-style:italic;margin-top:.75rem;font-family:'Crimson Pro',serif;">
+        ✦ Click to place points along your route. Double-click to finish a path segment. Use the tools on the left to add landmarks and overlays.
+      </p>
+    </div>
+  </div>
+</div>
+
+<footer style="margin-top:3rem;">
+  &copy; 2025 <span>Surrey Trails</span> &mdash; Wander freely. Tread gently. Leave no trace.
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/map-builder.js"></script>
+</body>
+</html>
